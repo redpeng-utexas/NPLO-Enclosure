@@ -4,7 +4,7 @@ const int ledPin = 11;
 void setup() {
   //sets up used components
   Serial.begin(9600);
-  pinMode(ledPin, OUTPUT);
+  pinMode(ledPin, OUTPUT); //testhbdajhbcjhbc
 }
 
 void loop() {
