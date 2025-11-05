@@ -1,5 +1,5 @@
 const int ledPin = 11;
-const int photoPin = A0;
+//const int photoPin = A0; THIS CODE IS COMPLETELY AND UTTERLY REDUNDANT YOU FOOOOOOLS!!!! -Vivi 
 
 void setup() {
   //sets up used components
