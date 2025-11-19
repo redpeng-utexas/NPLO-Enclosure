@@ -50,12 +50,19 @@ int story;
 7 - Dorothy by the Storm Shelter (second)
 */
 
+// TIMERS
+int timer;
+int timergoal;
 
 void setup() {
   Serial.begin(9600);
 
   //RESETS STORY PROGRESS
   story = 0;
+
+  //TIMER AND TIMERGOAL
+  timer = 0;
+  timergoal = 192;
 
   //ATTACHES AND INITIALIZES SERVOs
   tornadoSrv.attach(toSrvPin);
@@ -89,20 +96,20 @@ void setup() {
 //INDIVIDUAL STORY BEATS
 void storyOne() {
   if(digitalRead(firstButtonPin)){
-    digitalWrite(SadLightPin, HIGH); // Illuminates the sad face
     story = 1;
   }
 }
 
 void storyTwo() {
+  digitalWrite(SadLightPin, HIGH); // Illuminates the sad face
   if(digitalRead(tornadoButtonPin)){
     digitalWrite(SadLightPin, LOW); //turns off sad face
-    tornadoSrv.write(120); // Starts the tornado spinning
     story = 2;
   }
 }
 
 void storyThree() {
+  tornadoSrv.write(120); // Starts the tornado spinning
   if(digitalRead(cowButtonPin)){
     tornadoSrv.write(90); // Stops the tornado spinning (WARNING: EDIT TO MATCH STOPPING POINT OF SERVO)
     cowSrv.write(180); // Flips the Cow to the Munchkin
@@ -126,23 +133,31 @@ void storyFive() {
 
 void storySix() {
   if(digitalRead(curtainButtonPin)){
-    digitalWrite(SadLightPin, HIGH); // Illuminates the sad face
     story = 6;
   }
 }
 
 void storySeven() {
+  digitalWrite(SadLightPin, HIGH); // Illuminates the sad face
   if(digitalRead(shelterButtonPin)){
     digitalWrite(SadLightPin, LOW); // Turns off the sad face
-    shelterSrv.write(100); // Figure out timer so it only lasts a short period of time
-    slipperSrv.write(100); //Figure out exact speed to make the mechanism work
     story = 7;
   }
 }
 
 void storyEight() {
-  //timer set for the shelter
-  //timer set for the slippers
+  shelterSrv.write(100); //Starts the shelter and slipper spinning.
+  slipperSrv.write(100); 
+  if(timer > timergoal){
+    story = 8;
+  } else {
+    timer++;
+  }
+}
+
+void storyNine(){
+  shelterSrv.write(90); //Stops the shelter and slipper spinning.
+  slipperSrv.write(90);
 }
 
 
@@ -155,8 +170,8 @@ void (*storyManager[])(void) {
   storyFive(),
   storySix(),
   storySeven(),
-  storyEight()
-
+  storyEight(),
+  storyNine()
 };
 
 void loop() {
